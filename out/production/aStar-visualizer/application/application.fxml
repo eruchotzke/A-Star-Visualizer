@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
+   <children>
+      <Canvas fx:id="canvas_d" height="692.0" layoutX="826.0" layoutY="14.0" onMouseClicked="#onDCanvasClick" width="440.0" />
+      <Canvas fx:id="canvas_a" height="692.0" layoutX="375.0" layoutY="14.0" onMouseClicked="#onACanvasClick" width="440.0" />
+      <VBox layoutX="14.0" layoutY="14.0" prefHeight="692.0" prefWidth="337.0">
+         <children>
+            <Label text="Click mode">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <ChoiceBox fx:id="clickMode" prefWidth="150.0" />
+         </children>
+      </VBox>
+   </children>
+</Pane>
