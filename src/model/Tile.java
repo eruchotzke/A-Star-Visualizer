@@ -21,6 +21,6 @@ public class Tile {
 
     @Override
     public String toString(){
-        return "[Tile] (" + x + ", " + y + ")";
+        return "[Tile] (" + x + ", " + y + ") Dist: " + d_distance;
     }
 }

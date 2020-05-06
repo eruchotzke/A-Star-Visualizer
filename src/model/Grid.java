@@ -22,7 +22,7 @@ public class Grid {
         for(int x = 0; x < xDim; x++){
             for(int y = 0; y < yDim; y++){
                 grid[x][y] = new Tile(x, y);
-                if(rand.nextFloat() < 0.25) grid[x][y].isPassable = false;
+//                if(rand.nextFloat() < 0.25) grid[x][y].isPassable = false;
             }
         }
     }
@@ -68,5 +68,9 @@ public class Grid {
 
     public Tile getSource(){
         return source;
+    }
+
+    public Tile getTarget() {
+        return target;
     }
 }

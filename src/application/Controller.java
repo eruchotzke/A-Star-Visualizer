@@ -8,6 +8,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import model.*;
+import pathfinding.DjikstraPathfinder;
+import pathfinding.Path;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,9 +21,10 @@ public class Controller implements Initializable {
     private Color targetColor = Color.RED;
     private Color sourceColor = Color.BLUE;
     private Color obstacleColor = Color.BLACK;
+    private Color pathColor = Color.YELLOW;
 
     /* Model Resources */
-    Grid dGrid = new Grid(18, 30);
+    Grid dGrid = new Grid(36, 60);
     Grid aGrid = new Grid(36, 60);
 
     /*Serialized Resources */
@@ -51,6 +54,10 @@ public class Controller implements Initializable {
 
         drawGrid(canvas_d, dGrid);
         drawGrid(canvas_a, aGrid);
+
+        dGrid.setSource(0, 0);
+        dGrid.setTarget(10, 12);
+        generateShortestPath();
     }
 
     public void onDCanvasClick(MouseEvent event){
@@ -106,6 +113,23 @@ public class Controller implements Initializable {
         int y = (int)Math.floor(event.getY() / yOffset);
 
         return aGrid.getTileAt(x, y);
+    }
+
+    public void generateShortestPath(){
+        DjikstraPathfinder pathfinder = new DjikstraPathfinder();
+        Path shortest = pathfinder.generateShortestPath(dGrid);
+        System.out.println(shortest);
+
+        //calculate the offsets
+        double xOffset = canvas_d.getWidth() / dGrid.getXDimension();
+        double yOffset = canvas_d.getHeight() / dGrid.getYDimension();
+
+        canvas_d.getGraphicsContext2D().setFill(pathColor);
+
+        for(Tile t : shortest.getPath()){
+            //color this tile
+            canvas_d.getGraphicsContext2D().fillRect(t.x * xOffset, t.y * yOffset, (t.x + 1) * xOffset, (t.y + 1) * yOffset);
+        }
     }
 
     /**
