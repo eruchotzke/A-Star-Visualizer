@@ -41,26 +41,8 @@ public class DjikstraPathfinder implements Pathfinder {
             Tile left = g.getTileAt(next.x - 1, next.y);
             Tile right = g.getTileAt(next.x + 1, next.y);
 
-            if(top != null && top.d_distance > next.d_distance){
-                top.d_distance = next.d_distance + 1;
-                queue.remove(top);
-                queue.add(top);
-            }
-            if(bottom != null && bottom.d_distance > next.d_distance){
-                bottom.d_distance = next.d_distance + 1;
-                queue.remove(bottom);
-                queue.add(bottom);
-            }
-            if(left != null && left.d_distance > next.d_distance) {
-                left.d_distance = next.d_distance + 1;
-                queue.remove(left);
-                queue.add(left);
-            }
-            if(right != null && right.d_distance > next.d_distance){
-                right.d_distance = next.d_distance + 1;
-                queue.remove(right);
-                queue.add(right);
-            }
+            decreaseKey(queue, next, top, bottom);
+            decreaseKey(queue, next, left, right);
         }
 
         /* Now every necessary node has a distance value. Gradient Descent time */
@@ -75,6 +57,19 @@ public class DjikstraPathfinder implements Pathfinder {
         shortestPath.addTile(curr);
 
         return shortestPath;
+    }
+
+    private void decreaseKey(PriorityQueue<Tile> queue, Tile next, Tile top, Tile bottom) {
+        if(top != null && top.d_distance > next.d_distance && top.isPassable){
+            top.d_distance = next.d_distance + 1;
+            queue.remove(top);
+            queue.add(top);
+        }
+        if(bottom != null && bottom.d_distance > next.d_distance && bottom.isPassable){
+            bottom.d_distance = next.d_distance + 1;
+            queue.remove(bottom);
+            queue.add(bottom);
+        }
     }
 
     /**
@@ -111,6 +106,45 @@ public class DjikstraPathfinder implements Pathfinder {
 
     @Override
     public PathfinderState incrementShortestPath(Grid g, PathfinderState lastState) {
-        return null;
+        if(lastState.isComplete) return lastState; /* If done, do nothing. */
+
+        //If we are in the gradient descent phase of the algorithm
+        if(lastState.targetFound){
+            //get the most recent value from the path and continue descent
+            Tile last = lastState.shortestPath.getPath().get(lastState.shortestPath.getPath().size() - 1);
+            lastState.shortestPath.getPath().add(getSmallestNeighbor(g, last, lastState.shortestPath.getPath()));
+            if(lastState.shortestPath.getPath().get(lastState.shortestPath.getPath().size() - 1).d_distance == 0){
+                //we are done if distance is zero
+                lastState.isComplete = true;
+            }
+            return lastState;
+        }
+
+        // we must be in the search phase, continue searching
+        Tile lowest = lastState.queue.poll();
+        lastState.observed.remove(lowest);
+        lastState.closed.add(lowest);
+
+        if(lowest == g.getTarget()){
+            lastState.targetFound = true;
+            lastState.shortestPath.addTile(lowest);
+            return lastState;
+        }
+
+        //update each neighbor and add them to observed
+        Tile top = g.getTileAt(lowest.x, lowest.y - 1);
+        Tile bottom = g.getTileAt(lowest.x, lowest.y + 1);
+        Tile left = g.getTileAt(lowest.x - 1, lowest.y);
+        Tile right = g.getTileAt(lowest.x + 1, lowest.y);
+
+        if(top != null && lastState.observed.contains(top)) lastState.observed.add(top);
+        if(bottom != null && lastState.observed.contains(bottom)) lastState.observed.add(bottom);
+        if(left != null && lastState.observed.contains(left)) lastState.observed.add(left);
+        if(right != null && lastState.observed.contains(right)) lastState.observed.add(right);
+
+        decreaseKey(lastState.queue, lowest, top, bottom);
+        decreaseKey(lastState.queue, lowest, left, right);
+
+        return lastState;
     }
 }

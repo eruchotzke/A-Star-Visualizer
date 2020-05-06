@@ -2,15 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aStar-visualizer/application/Controller.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aStar-visualizer/application/Controller.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aStar-visualizer/model/Grid.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aStar-visualizer/model/Grid.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/aStar-visualizer/model/Tile.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/aStar-visualizer/model/Tile.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/application/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/Grid.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Grid.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/model/Tile.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/model/Tile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/application/application.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/application/application.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pathfinding/DjikstraPathfinder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pathfinding/DjikstraPathfinder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pathfinding/Path.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pathfinding/Path.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pathfinding/PathfinderState.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/pathfinding/PathfinderState.java" afterDir="false" />
     </list>
     <ignored path="JavaFxApplication.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -74,10 +69,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/application/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="73" selection-start-line="12" selection-start-column="73" selection-end-line="12" selection-end-column="73" />
+            <state relative-caret-position="353">
+              <caret line="21" selection-start-line="21" selection-end-line="21" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#639#640#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -86,32 +82,28 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/application/Controller.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="520">
-              <caret line="130" selection-start-line="130" selection-end-line="130" />
+            <state relative-caret-position="282">
+              <caret line="139" column="41" lean-forward="true" selection-start-line="139" selection-start-column="41" selection-end-line="139" selection-end-column="41" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="method#handleMouseClick#0;class#Controller#0" />
                 <element signature="method#getTileAtDCoordinates#0;class#Controller#0" />
                 <element signature="method#getTileAtACoordinates#0;class#Controller#0" />
-                <element signature="method#colorGrid#0;class#Controller#0" />
+                <element signature="e#4885#5054#0" expanded="true" />
+                <element signature="e#5053#5054#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/pathfinding/DjikstraPathfinder.java">
+        <entry file="file://$PROJECT_DIR$/src/pathfinding/PathfinderState.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="201">
-              <caret line="70" selection-start-line="70" selection-end-line="70" />
+            <state relative-caret-position="333">
+              <caret line="30" column="35" lean-forward="true" selection-start-line="30" selection-start-column="35" selection-end-line="30" selection-end-column="35" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#398#399#0" expanded="true" />
-                <element signature="e#466#467#0" expanded="true" />
-                <element signature="method#getSmallestNeighbor#0;class#DjikstraPathfinder#0" />
-                <element signature="e#3463#3464#0" expanded="true" />
-                <element signature="e#3534#3535#0" expanded="true" />
-                <element signature="e#3974#3975#0" expanded="true" />
+                <element signature="e#754#755#0" expanded="true" />
+                <element signature="e#822#823#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -120,11 +112,24 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/application/application.fxml">
           <provider editor-type-id="text-editor">
-            <state relative-caret-position="153">
-              <caret line="9" column="5" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
+            <state relative-caret-position="170">
+              <caret line="10" column="5" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
             </state>
           </provider>
           <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/pathfinding/DjikstraPathfinder.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="462">
+              <caret line="129" column="51" selection-start-line="129" selection-start-column="51" selection-end-line="129" selection-end-column="51" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="method#getSmallestNeighbor#0;class#DjikstraPathfinder#0" />
+              </folding>
+            </state>
+          </provider>
         </entry>
       </file>
     </leaf>
@@ -152,13 +157,13 @@
         <option value="$PROJECT_DIR$/src/sample/Controller.java" />
         <option value="$PROJECT_DIR$/src/sample/sample.fxml" />
         <option value="$PROJECT_DIR$/src/application/Main.java" />
-        <option value="$PROJECT_DIR$/src/application/application.fxml" />
-        <option value="$PROJECT_DIR$/src/pathfinding/PathfinderState.java" />
         <option value="$PROJECT_DIR$/src/pathfinding/Pathfinder.java" />
         <option value="$PROJECT_DIR$/src/model/Grid.java" />
         <option value="$PROJECT_DIR$/src/model/Tile.java" />
         <option value="$PROJECT_DIR$/src/pathfinding/Path.java" />
+        <option value="$PROJECT_DIR$/src/pathfinding/PathfinderState.java" />
         <option value="$PROJECT_DIR$/src/pathfinding/DjikstraPathfinder.java" />
+        <option value="$PROJECT_DIR$/src/application/application.fxml" />
         <option value="$PROJECT_DIR$/src/application/Controller.java" />
       </list>
     </option>
@@ -179,7 +184,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -214,7 +219,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -332,16 +337,18 @@
       <workItem from="1359379250712" duration="1302000" />
       <workItem from="1588713363541" duration="5642000" />
       <workItem from="1588721596527" duration="3795000" />
+      <workItem from="1588801419520" duration="5859000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10739000" />
+    <option name="totallyTimeSpent" value="16598000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6703755" visible="true" weight="0.12526652" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.6703755" visible="true" weight="0.12633263" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" />
       <window_info id="Designer" order="3" />
@@ -350,7 +357,7 @@
       <window_info id="UI Designer" order="6" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.32936078" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32936078" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3997833" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -397,21 +404,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pathfinding/PathfinderState.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="75" selection-start-line="3" selection-start-column="75" selection-end-line="3" selection-end-column="75" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/application/application.fxml">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="153">
-          <caret line="9" column="5" selection-start-line="9" selection-start-column="5" selection-end-line="9" selection-end-column="5" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/model/Tile.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
@@ -444,42 +436,72 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/pathfinding/DjikstraPathfinder.java">
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_151/javafx-src.zip!/com/sun/javafx/application/PlatformImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="201">
-          <caret line="70" selection-start-line="70" selection-end-line="70" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#398#399#0" expanded="true" />
-            <element signature="e#466#467#0" expanded="true" />
-            <element signature="method#getSmallestNeighbor#0;class#DjikstraPathfinder#0" />
-            <element signature="e#3463#3464#0" expanded="true" />
-            <element signature="e#3534#3535#0" expanded="true" />
-            <element signature="e#3974#3975#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="198">
+          <caret line="325" column="22" selection-start-line="325" selection-start-column="22" selection-end-line="325" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_151/jre/lib/rt.jar!/sun/misc/Unsafe.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="176">
+          <caret line="353" column="23" selection-start-line="353" selection-start-column="23" selection-end-line="353" selection-end-column="23" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/application/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="73" selection-start-line="12" selection-start-column="73" selection-end-line="12" selection-end-column="73" />
+        <state relative-caret-position="353">
+          <caret line="21" selection-start-line="21" selection-end-line="21" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#639#640#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/application/Controller.java">
+    <entry file="file://$PROJECT_DIR$/src/pathfinding/DjikstraPathfinder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="520">
-          <caret line="130" selection-start-line="130" selection-end-line="130" />
+        <state relative-caret-position="462">
+          <caret line="129" column="51" selection-start-line="129" selection-start-column="51" selection-end-line="129" selection-end-column="51" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#handleMouseClick#0;class#Controller#0" />
+            <element signature="method#getSmallestNeighbor#0;class#DjikstraPathfinder#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/pathfinding/PathfinderState.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="333">
+          <caret line="30" column="35" lean-forward="true" selection-start-line="30" selection-start-column="35" selection-end-line="30" selection-end-column="35" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#754#755#0" expanded="true" />
+            <element signature="e#822#823#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/application/application.fxml">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="5" selection-start-line="10" selection-start-column="5" selection-end-line="10" selection-end-column="5" />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="JavaFX-Scene-Builder" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/application/Controller.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="282">
+          <caret line="139" column="41" lean-forward="true" selection-start-line="139" selection-start-column="41" selection-end-line="139" selection-end-column="41" />
+          <folding>
+            <element signature="imports" expanded="true" />
             <element signature="method#getTileAtDCoordinates#0;class#Controller#0" />
             <element signature="method#getTileAtACoordinates#0;class#Controller#0" />
-            <element signature="method#colorGrid#0;class#Controller#0" />
+            <element signature="e#4885#5054#0" expanded="true" />
+            <element signature="e#5053#5054#0" expanded="true" />
           </folding>
         </state>
       </provider>

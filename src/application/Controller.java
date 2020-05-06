@@ -1,5 +1,6 @@
 package application;
 
+import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
@@ -7,9 +8,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import model.*;
 import pathfinding.DjikstraPathfinder;
 import pathfinding.Path;
+import pathfinding.PathfinderState;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -22,10 +25,16 @@ public class Controller implements Initializable {
     private Color sourceColor = Color.BLUE;
     private Color obstacleColor = Color.BLACK;
     private Color pathColor = Color.YELLOW;
+    private Color closedColor = Color.CYAN;
+    private Color observedColor = Color.LIGHTBLUE;
 
     /* Model Resources */
     Grid dGrid = new Grid(36, 60);
     Grid aGrid = new Grid(36, 60);
+    Path dShort;
+    Path aShort;
+    private PathfinderState state;
+    private AnimationTimer dAnimator;
 
     /*Serialized Resources */
     @FXML
@@ -52,12 +61,11 @@ public class Controller implements Initializable {
         clickMode.getItems().add("SET TARGET");
         clickMode.setValue(clickMode.getItems().get(0));
 
-        drawGrid(canvas_d, dGrid);
-        drawGrid(canvas_a, aGrid);
+        drawGridLines(canvas_d, dGrid, true);
+        drawGridLines(canvas_a, aGrid, true);
 
         dGrid.setSource(0, 0);
         dGrid.setTarget(10, 12);
-        generateShortestPath();
     }
 
     public void onDCanvasClick(MouseEvent event){
@@ -88,7 +96,7 @@ public class Controller implements Initializable {
                 System.out.println("Command not found.");
                 break;
         }
-        drawGrid(canvas_a, aGrid);
+        drawGridLines(canvas_a, aGrid, true);
     }
 
     public Tile getTileAtDCoordinates(MouseEvent event){
@@ -117,27 +125,82 @@ public class Controller implements Initializable {
 
     public void generateShortestPath(){
         DjikstraPathfinder pathfinder = new DjikstraPathfinder();
-        Path shortest = pathfinder.generateShortestPath(dGrid);
-        System.out.println(shortest);
+        if(dAnimator != null){
+            dAnimator.stop();
+            dAnimator = null;
+        }
+        PathfinderState state = new PathfinderState(dGrid);
+        while(!state.isComplete){
+            state = pathfinder.incrementShortestPath(dGrid, state);
+            drawGrid(canvas_d, dGrid, state);
+        }
+        drawGrid(canvas_d, dGrid, state);
+    }
 
-        //calculate the offsets
-        double xOffset = canvas_d.getWidth() / dGrid.getXDimension();
-        double yOffset = canvas_d.getHeight() / dGrid.getYDimension();
+    private void incrementShortestPath(){
+        DjikstraPathfinder pathfinder = new DjikstraPathfinder();
+        if(state == null) state = new PathfinderState(dGrid);
 
-        canvas_d.getGraphicsContext2D().setFill(pathColor);
+        state = pathfinder.incrementShortestPath(dGrid, state);
+        drawGrid(canvas_d, dGrid, state);
 
-        for(Tile t : shortest.getPath()){
-            //color this tile
-            canvas_d.getGraphicsContext2D().fillRect(t.x * xOffset, t.y * yOffset, (t.x + 1) * xOffset, (t.y + 1) * yOffset);
+        if(state.isComplete) state = null;
+    }
+
+    public void animateShortestPath(){
+        dAnimator = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                incrementShortestPath();
+                if(state == null){
+                    dAnimator.stop();
+                    dAnimator = null;
+                }
+            }
+        };
+
+        dAnimator.start();
+    }
+
+    private void drawGrid(Canvas canvas, Grid grid, PathfinderState state){
+        drawGridLines(canvas, grid, false);
+
+        /* Now color tiles according to the state */
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        /* Get the offsets */
+        double xOffset = canvas.getWidth() / grid.getXDimension();
+        double yOffset = canvas.getHeight() / grid.getYDimension();
+
+        /* Color each box */
+        double currX = 0;
+        double currY = 0;
+        for(int x = 0; x < grid.getXDimension(); x++){
+            currY = 0;
+            for(int y = 0; y < grid.getYDimension(); y++){
+                Tile curr = grid.getTileAt(x, y);
+                //color the tile according to what it is
+                gc.setFill(baseColor);
+                if(state.observed.contains(curr)) gc.setFill(observedColor);
+                if(state.closed.contains(curr)) gc.setFill(closedColor);
+                if(state.shortestPath.getPath().contains(curr)) gc.setFill(pathColor);
+                if(!curr.isPassable) gc.setFill(obstacleColor);
+                if(dGrid.getSource() == curr) gc.setFill(sourceColor);
+                if(dGrid.getTarget() == curr) gc.setFill(targetColor);
+                gc.fillRect(currX, currY, xOffset, yOffset);
+                currY += yOffset;
+            }
+            currX += xOffset;
         }
     }
+
 
     /**
      * Draw the grid outline onto a canvas.
      * @param canvas The canvas to draw the grid onto.
      * @param grid The grid to draw onto the canvas.
      */
-    private void drawGrid(Canvas canvas, Grid grid){
+    private void drawGridLines(Canvas canvas, Grid grid, boolean color){
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.setLineWidth(1);
 
@@ -159,7 +222,7 @@ public class Controller implements Initializable {
             offset += yOffset;
         }
 
-        colorGrid(canvas, grid);
+        if(color) colorGrid(canvas, grid);
     }
 
     /**
@@ -183,6 +246,8 @@ public class Controller implements Initializable {
                 Tile curr = grid.getTileAt(x, y);
                 //color the tile according to what it is
                 gc.setFill(baseColor);
+                if(dShort != null && canvas == canvas_d && dShort.getPath().contains(curr)) gc.setFill(pathColor);
+                if(aShort != null && canvas == canvas_a && aShort.getPath().contains(curr)) gc.setFill(pathColor);
                 if(curr.isTarget) gc.setFill(targetColor);
                 if(!curr.isPassable) gc.setFill(obstacleColor);
                 if(grid.getSource() == curr) gc.setFill(sourceColor);
