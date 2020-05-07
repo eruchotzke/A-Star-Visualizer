@@ -48,6 +48,11 @@ public class AStarPathfinder implements Pathfinder {
         Tile left = g.getTileAt(next.tile.x - 1, next.tile.y);
         Tile right = g.getTileAt(next.tile.x + 1, next.tile.y);
 
+        Tile tl = g.getTileAt(next.tile.x - 1, next.tile.y - 1);
+        Tile tr = g.getTileAt(next.tile.x + 1, next.tile.y - 1);
+        Tile bl = g.getTileAt(next.tile.x - 1, next.tile.y + 1);
+        Tile br = g.getTileAt(next.tile.x + 1, next.tile.y + 1);
+
         /* If the neighbor exists and is passable, add it to open */
         if(top != null && top.isPassable){
             AStarWrapper temp = new AStarWrapper(top);
@@ -63,6 +68,23 @@ public class AStarPathfinder implements Pathfinder {
         }
         if(right != null && right.isPassable){
             AStarWrapper temp = new AStarWrapper(right);
+            handleTileReduce(lastState, temp, next);
+        }
+
+        if(tl != null && tl.isPassable){
+            AStarWrapper temp = new AStarWrapper(tl);
+            handleTileReduce(lastState, temp, next);
+        }
+        if(tr != null && tr.isPassable){
+            AStarWrapper temp = new AStarWrapper(tr);
+            handleTileReduce(lastState, temp, next);
+        }
+        if(bl != null && bl.isPassable){
+            AStarWrapper temp = new AStarWrapper(bl);
+            handleTileReduce(lastState, temp, next);
+        }
+        if(br != null && br.isPassable){
+            AStarWrapper temp = new AStarWrapper(br);
             handleTileReduce(lastState, temp, next);
         }
 

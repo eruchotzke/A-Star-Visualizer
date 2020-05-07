@@ -1,5 +1,7 @@
 package application;
 
+import Mazes.MazeGenerator;
+import com.sun.org.apache.xerces.internal.impl.dv.xs.YearDV;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,8 +28,11 @@ public class Controller implements Initializable {
     private Color observedColor = Color.LIGHTBLUE;
 
     /* Model Resources */
-    Grid dGrid = new Grid(36, 60);
-    Grid aGrid = new Grid(36, 60);
+    private static int X_DIMENSION = 12;
+    private static int Y_DIMENSION;
+    private static double aspectRatio;
+    Grid dGrid;
+    Grid aGrid;
     Path dShort;
     Path aShort;
     private PathfinderState dState;
@@ -48,17 +53,20 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        canvas_a.getGraphicsContext2D().setFill(Color.RED);
-        canvas_a.getGraphicsContext2D().fillRect(0, 0, canvas_a.getWidth(), canvas_a.getHeight());
+        aspectRatio = canvas_a.getWidth() / canvas_a.getHeight();
+        Y_DIMENSION = (int)(X_DIMENSION / aspectRatio);
 
-        canvas_d.getGraphicsContext2D().setFill(Color.BLUE);
-        canvas_d.getGraphicsContext2D().fillRect(0, 0, canvas_d.getWidth(), canvas_d.getHeight());
+        dGrid = new Grid(X_DIMENSION, Y_DIMENSION);
+        aGrid = new Grid(X_DIMENSION, Y_DIMENSION);
 
         clickMode.getItems().add("NONE");
         clickMode.getItems().add("TOGGLE OBSTACLE");
         clickMode.getItems().add("SET SOURCE");
         clickMode.getItems().add("SET TARGET");
         clickMode.setValue(clickMode.getItems().get(0));
+
+        MazeGenerator.generatePrimsMaze(aGrid);
+        dGrid.copyGrid(aGrid);
 
         drawGridLines(canvas_d, dGrid, true);
         drawGridLines(canvas_a, aGrid, true);

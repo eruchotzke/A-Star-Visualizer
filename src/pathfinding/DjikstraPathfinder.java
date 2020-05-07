@@ -83,6 +83,10 @@ public class DjikstraPathfinder implements Pathfinder {
         Tile bottom = g.getTileAt(source.x, source.y + 1);
         Tile left = g.getTileAt(source.x - 1, source.y);
         Tile right = g.getTileAt(source.x + 1, source.y);
+        Tile tl = g.getTileAt(source.x - 1, source.y - 1);
+        Tile tr = g.getTileAt(source.x + 1, source.y - 1);
+        Tile bl = g.getTileAt(source.x - 1, source.y + 1);
+        Tile br = g.getTileAt(source.x + 1, source.y + 1);
 
         //return the smallest tile
         ArrayList<Tile> cheat = new ArrayList<>();
@@ -90,6 +94,10 @@ public class DjikstraPathfinder implements Pathfinder {
         if(bottom != null) cheat.add(bottom);
         if(left != null) cheat.add(left);
         if(right != null) cheat.add(right);
+        if(tl != null) cheat.add(tl);
+        if(tr != null) cheat.add(tr);
+        if(bl != null) cheat.add(bl);
+        if(br != null) cheat.add(br);
         cheat.sort(new Comparator<Tile>() {
             @Override
             public int compare(Tile o1, Tile o2) {
@@ -137,13 +145,24 @@ public class DjikstraPathfinder implements Pathfinder {
         Tile left = g.getTileAt(lowest.x - 1, lowest.y);
         Tile right = g.getTileAt(lowest.x + 1, lowest.y);
 
+        Tile tl = g.getTileAt(lowest.x - 1, lowest.y - 1);
+        Tile tr = g.getTileAt(lowest.x + 1, lowest.y - 1);
+        Tile bl = g.getTileAt(lowest.x - 1, lowest.y + 1);
+        Tile br = g.getTileAt(lowest.x + 1, lowest.y + 1);
+
         if(top != null && lastState.observed.contains(top)) lastState.observed.add(top);
         if(bottom != null && lastState.observed.contains(bottom)) lastState.observed.add(bottom);
         if(left != null && lastState.observed.contains(left)) lastState.observed.add(left);
         if(right != null && lastState.observed.contains(right)) lastState.observed.add(right);
+        if(tl != null && lastState.observed.contains(tl)) lastState.observed.add(tl);
+        if(tr != null && lastState.observed.contains(tr)) lastState.observed.add(tr);
+        if(bl != null && lastState.observed.contains(bl)) lastState.observed.add(bl);
+        if(br != null && lastState.observed.contains(br)) lastState.observed.add(br);
 
         decreaseKey(lastState.queue, lowest, top, bottom);
         decreaseKey(lastState.queue, lowest, left, right);
+        decreaseKey(lastState.queue, lowest, tl, br);
+        decreaseKey(lastState.queue, lowest, tr, bl);
 
         return lastState;
     }

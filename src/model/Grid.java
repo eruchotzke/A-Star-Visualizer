@@ -73,4 +73,12 @@ public class Grid {
     public Tile getTarget() {
         return target;
     }
+
+    public void copyGrid(Grid other){
+        for(int x = 0; x < getXDimension(); x++){
+            for(int y = 0; y < getYDimension(); y++){
+                getTileAt(x,y).isPassable = other.getTileAt(x,y).isPassable;
+            }
+        }
+    }
 }
