@@ -8,11 +8,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import model.*;
-import pathfinding.DjikstraPathfinder;
-import pathfinding.Path;
-import pathfinding.PathfinderState;
+import pathfinding.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -33,8 +30,10 @@ public class Controller implements Initializable {
     Grid aGrid = new Grid(36, 60);
     Path dShort;
     Path aShort;
-    private PathfinderState state;
+    private PathfinderState dState;
+    private PathfinderState aState;
     private AnimationTimer dAnimator;
+    private AnimationTimer aAnimator;
 
     /*Serialized Resources */
     @FXML
@@ -63,40 +62,44 @@ public class Controller implements Initializable {
 
         drawGridLines(canvas_d, dGrid, true);
         drawGridLines(canvas_a, aGrid, true);
-
-        dGrid.setSource(0, 0);
-        dGrid.setTarget(10, 12);
     }
 
     public void onDCanvasClick(MouseEvent event){
         Tile selected = getTileAtDCoordinates(event);
-        handleMouseClick(selected, dGrid, canvas_d);
+        handleMouseClick(selected);
     }
 
     public void onACanvasClick(MouseEvent event){
         Tile selected = getTileAtACoordinates(event);
-        handleMouseClick(selected, aGrid, canvas_a);
+        handleMouseClick(selected);
     }
 
-    private void handleMouseClick(Tile selected, Grid aGrid, Canvas canvas_a) {
+    private void handleMouseClick(Tile selected) {
         switch(((String)(clickMode.getValue())).toLowerCase()){
             case "none":
                 System.out.println(selected);
                 break;
             case "toggle obstacle":
-                selected.isPassable = !selected.isPassable;
+                Tile aTile = aGrid.getTileAt(selected.x, selected.y);
+                Tile dTile = dGrid.getTileAt(selected.x, selected.y);
+
+                aTile.isPassable = !aTile.isPassable;
+                dTile.isPassable = !dTile.isPassable;
                 break;
             case "set source":
                 aGrid.setSource(selected.x, selected.y);
+                dGrid.setSource(selected.x, selected.y);
                 break;
             case "set target":
                 aGrid.setTarget(selected.x, selected.y);
+                dGrid.setTarget(selected.x, selected.y);
                 break;
             default:
                 System.out.println("Command not found.");
                 break;
         }
         drawGridLines(canvas_a, aGrid, true);
+        drawGridLines(canvas_d, dGrid, true);
     }
 
     public Tile getTileAtDCoordinates(MouseEvent event){
@@ -123,36 +126,64 @@ public class Controller implements Initializable {
         return aGrid.getTileAt(x, y);
     }
 
+    public void generateAStarPath(){
+        AStarPathfinder pathfinder = new AStarPathfinder();
+        aShort = pathfinder.generateShortestPath(aGrid);
+        System.out.println(aShort);
+        drawGridLines(canvas_a, aGrid, true);
+    }
+
     public void generateShortestPath(){
         DjikstraPathfinder pathfinder = new DjikstraPathfinder();
         if(dAnimator != null){
             dAnimator.stop();
             dAnimator = null;
         }
-        PathfinderState state = new PathfinderState(dGrid);
+        PathfinderState state = new PathfinderState(dGrid, true);
         while(!state.isComplete){
             state = pathfinder.incrementShortestPath(dGrid, state);
-            drawGrid(canvas_d, dGrid, state);
+            drawDGrid(canvas_d, dGrid, state);
         }
-        drawGrid(canvas_d, dGrid, state);
+        drawDGrid(canvas_d, dGrid, state);
+
+        generateAStarPath();
     }
 
     private void incrementShortestPath(){
         DjikstraPathfinder pathfinder = new DjikstraPathfinder();
-        if(state == null) state = new PathfinderState(dGrid);
+        if(dState == null) dState = new PathfinderState(dGrid, true);
 
-        state = pathfinder.incrementShortestPath(dGrid, state);
-        drawGrid(canvas_d, dGrid, state);
+        dState = pathfinder.incrementShortestPath(dGrid, dState);
+        drawDGrid(canvas_d, dGrid, dState);
 
-        if(state.isComplete) state = null;
+        if(dState.isComplete) dState = null;
     }
 
-    public void animateShortestPath(){
+    private void incrementAStarShortestPath(){
+        AStarPathfinder pathfinder1 = new AStarPathfinder();
+        if(aState == null) aState = new PathfinderState(aGrid, false);
+
+        aState = pathfinder1.incrementShortestPath(aGrid, aState);
+        drawAGrid(canvas_a, aGrid, aState);
+
+        if(aState.isComplete) aState = null;
+    }
+
+    public void animateShortestPaths(){
+        animateShortestPath();
+        animateAStarShortestPath();
+    }
+
+    private void animateShortestPath(){
+        if(dAnimator != null){
+            dAnimator.stop();
+            dState = null;
+        }
         dAnimator = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 incrementShortestPath();
-                if(state == null){
+                if(dState == null){
                     dAnimator.stop();
                     dAnimator = null;
                 }
@@ -162,10 +193,60 @@ public class Controller implements Initializable {
         dAnimator.start();
     }
 
-    private void drawGrid(Canvas canvas, Grid grid, PathfinderState state){
+    private void animateAStarShortestPath(){
+        if(aAnimator != null){
+            aAnimator.stop();
+            aState = null;
+        }
+        aAnimator = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                incrementAStarShortestPath();
+                if(aState == null){
+                    aAnimator.stop();
+                    aAnimator = null;
+                }
+            }
+        };
+
+        aAnimator.start();
+    }
+
+    private void drawAGrid(Canvas canvas, Grid grid, PathfinderState state){
         drawGridLines(canvas, grid, false);
 
-        /* Now color tiles according to the state */
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        /* Get the offsets */
+        double xOffset = canvas.getWidth() / grid.getXDimension();
+        double yOffset = canvas.getHeight() / grid.getYDimension();
+
+        /* Color each box */
+        double currX = 0;
+        double currY = 0;
+        for(int x = 0; x < grid.getXDimension(); x++){
+            currY = 0;
+            for(int y = 0; y < grid.getYDimension(); y++){
+                Tile curr = grid.getTileAt(x, y);
+                //color the tile according to what it is
+                gc.setFill(baseColor);
+                if(state.open.contains(new AStarWrapper(curr))) gc.setFill(observedColor);
+                if(state.star_closed.contains(new AStarWrapper(curr))) gc.setFill(closedColor);
+                if(state.star_path.contains(new AStarWrapper(curr))) gc.setFill(pathColor);
+                if(!curr.isPassable) gc.setFill(obstacleColor);
+                if(aGrid.getSource() == curr) gc.setFill(sourceColor);
+                if(aGrid.getTarget() == curr) gc.setFill(targetColor);
+                gc.fillRect(currX, currY, xOffset, yOffset);
+                currY += yOffset;
+            }
+            currX += xOffset;
+        }
+    }
+
+    private void drawDGrid(Canvas canvas, Grid grid, PathfinderState state){
+        drawGridLines(canvas, grid, false);
+
+        /* Now color tiles according to the dState */
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
         /* Get the offsets */

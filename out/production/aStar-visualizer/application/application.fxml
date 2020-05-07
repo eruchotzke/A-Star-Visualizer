@@ -21,7 +21,7 @@
             </Label>
             <ChoiceBox fx:id="clickMode" prefWidth="150.0" />
             <Button mnemonicParsing="false" onAction="#generateShortestPath" prefHeight="43.0" prefWidth="221.0" text="Generate Shortest Paths" />
-            <Button mnemonicParsing="false" onAction="#animateShortestPath" prefHeight="42.0" prefWidth="221.0" text="Animate Algorithm" />
+            <Button mnemonicParsing="false" onAction="#animateShortestPaths" prefHeight="42.0" prefWidth="221.0" text="Animate Algorithm" />
          </children>
       </VBox>
    </children>
