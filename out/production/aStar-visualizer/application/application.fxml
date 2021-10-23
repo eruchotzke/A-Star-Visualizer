@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -22,6 +23,13 @@
             <ChoiceBox fx:id="clickMode" prefWidth="150.0" />
             <Button mnemonicParsing="false" onAction="#generateShortestPath" prefHeight="43.0" prefWidth="221.0" text="Generate Shortest Paths" />
             <Button mnemonicParsing="false" onAction="#animateShortestPaths" prefHeight="42.0" prefWidth="221.0" text="Animate Algorithm" />
+            <Label fx:id="densityLabel" text="Grid Density">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Slider fx:id="densitySlider" max="200.0" min="6.0" minorTickCount="0" onMouseReleased="#onSliderChanged" prefHeight="14.0" prefWidth="229.0" value="6.0" />
+            <Button mnemonicParsing="false" onAction="#regenerateMaze" prefHeight="47.0" prefWidth="220.0" text="Regenerate Maze" />
          </children>
       </VBox>
    </children>

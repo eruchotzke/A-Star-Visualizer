@@ -8,12 +8,15 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import model.*;
 import pathfinding.*;
 
 import java.net.URL;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
@@ -50,12 +53,17 @@ public class Controller implements Initializable {
     @FXML
     private ChoiceBox clickMode;
 
+    @FXML
+    private Label densityLabel;
+
+    @FXML
+    private Slider densitySlider;
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         aspectRatio = canvas_a.getWidth() / canvas_a.getHeight();
-        Y_DIMENSION = (int)(X_DIMENSION / aspectRatio);
-
+        onSliderChanged();
         dGrid = new Grid(X_DIMENSION, Y_DIMENSION);
         aGrid = new Grid(X_DIMENSION, Y_DIMENSION);
 
@@ -68,6 +76,21 @@ public class Controller implements Initializable {
         MazeGenerator.generatePrimsMaze(aGrid);
         dGrid.copyGrid(aGrid);
 
+        drawGridLines(canvas_d, dGrid, true);
+        drawGridLines(canvas_a, aGrid, true);
+    }
+
+    public void onSliderChanged(){
+        densityLabel.setText("Grid Density: " + (int)(densitySlider.getValue()));
+        X_DIMENSION = (int)(densitySlider.getValue());
+        Y_DIMENSION = (int)(X_DIMENSION / aspectRatio);
+    }
+
+    public void regenerateMaze(){
+        dGrid = new Grid(X_DIMENSION, Y_DIMENSION);
+        aGrid = new Grid(X_DIMENSION, Y_DIMENSION);
+        MazeGenerator.generatePrimsMaze(aGrid);
+        dGrid.copyGrid(aGrid);
         drawGridLines(canvas_d, dGrid, true);
         drawGridLines(canvas_a, aGrid, true);
     }
@@ -178,6 +201,28 @@ public class Controller implements Initializable {
     }
 
     public void animateShortestPaths(){
+        if(aGrid.getSource() == null || aGrid.getTarget() == null){
+            Random rand = new Random();
+            int x = rand.nextInt(aGrid.getXDimension());
+            int y = rand.nextInt(aGrid.getYDimension());
+            while(!aGrid.getTileAt(x,y).isPassable){
+                x = rand.nextInt(aGrid.getXDimension());
+                y = rand.nextInt(aGrid.getYDimension());
+            }
+            aGrid.setSource(x,y);
+            dGrid.setSource(x,y);
+
+            x = rand.nextInt(aGrid.getXDimension());
+            y = rand.nextInt(aGrid.getYDimension());
+
+            while(!aGrid.getTileAt(x,y).isPassable && aGrid.getTileAt(x,y) == aGrid.getSource()){
+                x = rand.nextInt(aGrid.getXDimension());
+                y = rand.nextInt(aGrid.getYDimension());
+            }
+            aGrid.setTarget(x,y);
+            dGrid.setTarget(x,y);
+        }
+        System.out.println(aGrid.getTarget() + " " + aGrid.getSource());
         animateShortestPath();
         animateAStarShortestPath();
     }
